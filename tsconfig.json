@@ -11,6 +11,11 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,
-    "noUnusedLocals": false
+    "noUnusedLocals": false,
+    "paths": {
+      "@features/*": ["./src/features/*"],
+      "@models/*": ["./src/models/*"],
+      "@common/*": ["./src/common/*"]
+    }
   }
 }
