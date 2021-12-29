@@ -16,4 +16,11 @@ export class RolesService {
     const role = await this.roleRepository.findOne({ where: { value } });
     return role;
   }
+
+  async getRolesByValues(values: string[]): Promise<Role[]> {
+    const roles = await this.roleRepository.findAll({
+      where: { value: values },
+    });
+    return roles;
+  }
 }

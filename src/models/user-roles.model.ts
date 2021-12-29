@@ -20,9 +20,9 @@ export class UserRoles extends Model<UserRoles> {
 
   @ForeignKey(() => Role)
   @Column({
-    type: DataType.INTEGER,
+    type: DataType.ARRAY(DataType.INTEGER),
   })
-  roleId: number;
+  rolesIds: number[];
 
   @ForeignKey(() => User)
   @Column({

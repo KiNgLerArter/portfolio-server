@@ -1,4 +1,4 @@
-import { Roles } from '@common/types/roles.model';
+import { RolesList } from '@common/types/roles.model';
 import {
   BelongsToMany,
   Column,
@@ -29,7 +29,7 @@ export class Role extends Model<Role, RoleCreationAttrs> {
     unique: true,
     allowNull: false,
   })
-  value: Roles;
+  value: RolesList;
 
   @Column({
     type: DataType.STRING,
