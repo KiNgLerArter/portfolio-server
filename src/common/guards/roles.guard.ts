@@ -2,6 +2,7 @@ import { ROLES_KEY } from '@common/decorators/roles.decorator';
 import {
   CanActivate,
   ExecutionContext,
+  ForbiddenException,
   HttpException,
   HttpStatus,
   Injectable,
@@ -41,9 +42,8 @@ export class RolesGuard implements CanActivate {
       req.user = user;
       return user.roles.some((role) => requiredRoles.includes(role.value));
     } catch (error) {
-      throw new HttpException(
+      throw new ForbiddenException(
         "User don't have permission to access this endpoint",
-        HttpStatus.FORBIDDEN,
       );
     }
   }

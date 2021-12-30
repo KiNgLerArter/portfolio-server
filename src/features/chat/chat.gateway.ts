@@ -11,7 +11,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 
-@WebSocketGateway()
+@WebSocketGateway({ cors: true })
 export class ChatGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
@@ -20,7 +20,7 @@ export class ChatGateway
   private logger: Logger = new Logger('ChatGateway');
 
   afterInit(server: Server) {
-    this.logger.log('Initialized');
+    this.logger.log(`WebSocket INITTED`);
   }
 
   handleConnection(client: Socket, ...args: any[]) {
@@ -31,13 +31,14 @@ export class ChatGateway
     this.logger.log(`Client disconnected: ${client.id}`);
   }
 
-  @SubscribeMessage('messageToUser')
-  handleMessageToUser(client: Socket, message: string): WsResponse<string> {
-    return { event: 'messageToUser', data: message };
+  @SubscribeMessage('messageToServer')
+  handleMessageToUser(client: Socket, data: any): WsResponse<string> {
+    console.log('[data]:', data);
+    return { event: 'messageToClient', data };
   }
 
   @SubscribeMessage('messageToGroup')
-  handleMessageToServer(@MessageBody() message: string): void {
-    this.group.emit('messageToGroup', message);
+  handleMessageToServer(@MessageBody() data: string): void {
+    this.group.emit('messageFromGroup', data);
   }
 }
