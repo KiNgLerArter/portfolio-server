@@ -5,8 +5,10 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import { Role } from './roles.model';
-import { UserRoles } from './user-roles.model';
+import { Role } from './role.model';
+import { UserRoles } from './combined/user-roles.model';
+import { ChatGroup } from './chat-group.model';
+import { UserChatGroups } from './combined/user-chat-groups.model';
 
 interface UserCreationAttrs {
   email: string;
@@ -50,4 +52,7 @@ export class User extends Model<User, UserCreationAttrs> {
 
   @BelongsToMany(() => Role, () => UserRoles)
   roles: Role[];
+
+  @BelongsToMany(() => ChatGroup, () => UserChatGroups)
+  chatGroups: ChatGroup[];
 }

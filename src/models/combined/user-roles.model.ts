@@ -5,8 +5,8 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import { Role } from './roles.model';
-import { User } from './users.model';
+import { Role } from '../role.model';
+import { User } from '../user.model';
 
 @Table({ tableName: 'user_roles', createdAt: false, updatedAt: false })
 export class UserRoles extends Model<UserRoles> {
@@ -20,9 +20,9 @@ export class UserRoles extends Model<UserRoles> {
 
   @ForeignKey(() => Role)
   @Column({
-    type: DataType.ARRAY(DataType.INTEGER),
+    type: DataType.INTEGER,
   })
-  rolesIds: number[];
+  roleId: number;
 
   @ForeignKey(() => User)
   @Column({

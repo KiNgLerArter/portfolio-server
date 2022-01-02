@@ -1,7 +1,7 @@
 import { RolesService } from '@features/roles/roles.service';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { User } from 'src/models/users.model';
+import { User } from '@models/user.model';
 import { BanUserDto } from './dto/ban-user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { EditRolesDto } from './dto/edit-roles-dto';

@@ -1,8 +1,8 @@
-import { UserRoles } from '@models/user-roles.model';
+import { UserRoles } from '@models/combined/user-roles.model';
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { Role } from 'src/models/roles.model';
-import { User } from 'src/models/users.model';
+import { Role } from 'src/models/role.model';
+import { User } from '@models/user.model';
 import { RolesController } from './roles.controller';
 import { RolesService } from './roles.service';
 

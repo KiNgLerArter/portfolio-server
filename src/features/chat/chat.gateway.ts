@@ -10,6 +10,10 @@ import {
   WsResponse,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import {
+  SaveGroupMessageDto,
+  SaveUserMessageDto,
+} from './dto/save-message.dto';
 
 @WebSocketGateway({ cors: true })
 export class ChatGateway
@@ -31,14 +35,19 @@ export class ChatGateway
     this.logger.log(`Client disconnected: ${client.id}`);
   }
 
-  @SubscribeMessage('messageToServer')
-  handleMessageToUser(client: Socket, data: any): WsResponse<string> {
-    console.log('[data]:', data);
-    return { event: 'messageToClient', data };
+  @SubscribeMessage('messageToUser')
+  async handleMessageToUser(
+    client: Socket,
+    data: SaveUserMessageDto,
+  ): Promise<WsResponse<SaveUserMessageDto>> {
+    return { event: 'messageFromClient', data };
   }
 
   @SubscribeMessage('messageToGroup')
-  handleMessageToServer(@MessageBody() data: string): void {
-    this.group.emit('messageFromGroup', data);
+  async handleMessageToGroup(
+    @MessageBody() data: SaveGroupMessageDto,
+  ): Promise<WsResponse<SaveGroupMessageDto>> {
+    // this.group.emit('messageFromGroup', data);
+    return { event: 'messageFromGroup', data };
   }
 }
