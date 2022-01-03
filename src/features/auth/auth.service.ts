@@ -1,7 +1,7 @@
 import { AuthTokens } from '@common/types/auth.model';
 import { CreateUserDto } from '@features/users/dto/create-user.dto';
 import { UsersService } from '@features/users/users.service';
-import { User } from '@models/user.model';
+import { User } from '@db-models/user.model';
 import {
   HttpException,
   HttpStatus,

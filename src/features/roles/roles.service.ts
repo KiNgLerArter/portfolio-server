@@ -1,4 +1,4 @@
-import { Role } from '@models/role.model';
+import { Role } from '@db-models/role.model';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateRoleDto } from './dto/create-role.dto';

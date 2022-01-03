@@ -10,18 +10,27 @@ import {
   WsResponse,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { ChatDialogService } from './dialog/chat-dialog.service';
 import {
+  SaveDialogMessageDto,
   SaveGroupMessageDto,
-  SaveUserMessageDto,
 } from './dto/save-message.dto';
+import { ChatGroupService } from './group/chat-group.service';
 
-@WebSocketGateway({ cors: true })
+@WebSocketGateway({ cors: true, namespace: 'chat' })
 export class ChatGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
-  @WebSocketServer() group: Server;
+  @WebSocketServer() server: Server;
 
   private logger: Logger = new Logger('ChatGateway');
+  private dialogLogger: Logger = new Logger('ChatDialog');
+  private groupLogger: Logger = new Logger('ChatGroup');
+
+  constructor(
+    private chatDialogService: ChatDialogService,
+    private chatGroupService: ChatGroupService,
+  ) {}
 
   afterInit(server: Server) {
     this.logger.log(`WebSocket INITTED`);
@@ -35,19 +44,16 @@ export class ChatGateway
     this.logger.log(`Client disconnected: ${client.id}`);
   }
 
-  @SubscribeMessage('messageToUser')
-  async handleMessageToUser(
-    client: Socket,
-    data: SaveUserMessageDto,
-  ): Promise<WsResponse<SaveUserMessageDto>> {
-    return { event: 'messageFromClient', data };
+  @SubscribeMessage('messageToDialog')
+  async handleMessageToUser(client: Socket, data: SaveDialogMessageDto) {
+    this.dialogLogger.log(`messageToDialog: ${data.body}`);
+    await this.chatDialogService.saveMessage(data);
+    this.server.to(`dialog-${data.dialogId}`).emit('messageFromDialog', data);
   }
 
   @SubscribeMessage('messageToGroup')
-  async handleMessageToGroup(
-    @MessageBody() data: SaveGroupMessageDto,
-  ): Promise<WsResponse<SaveGroupMessageDto>> {
-    // this.group.emit('messageFromGroup', data);
-    return { event: 'messageFromGroup', data };
+  async handleMessageToGroup(@MessageBody() data: SaveGroupMessageDto) {
+    this.groupLogger.log(`messageToGroup: ${data.body}`);
+    this.server.to(`group-${data.groupId}`).emit('messageFromGroup', data);
   }
 }

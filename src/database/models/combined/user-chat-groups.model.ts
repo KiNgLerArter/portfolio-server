@@ -5,8 +5,8 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import { ChatGroup } from '@models/chat-group.model';
-import { User } from '@models/user.model';
+import { ChatGroup } from '@db-models/chat-group.model';
+import { User } from '@db-models/user.model';
 
 @Table({ tableName: 'user_chat_groups', createdAt: false, updatedAt: false })
 export class UserChatGroups extends Model<UserChatGroups> {

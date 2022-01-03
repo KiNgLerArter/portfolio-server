@@ -1,9 +1,9 @@
-import { Role } from '@models/role.model';
+import { Role } from '@db-models/role.model';
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { RolesService } from './roles.service';
 
-@Controller('roles')
+@Controller()
 export class RolesController {
   constructor(private rolesService: RolesService) {}
 

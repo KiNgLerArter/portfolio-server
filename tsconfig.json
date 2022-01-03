@@ -14,7 +14,7 @@
     "noUnusedLocals": false,
     "paths": {
       "@features/*": ["./src/features/*"],
-      "@models/*": ["./src/models/*"],
+      "@db-models/*": ["./src/database/models/*"],
       "@common/*": ["./src/common/*"]
     }
   }

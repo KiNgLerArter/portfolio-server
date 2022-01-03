@@ -1,12 +1,12 @@
 class Message {
-  readonly userId: number;
-  readonly repliedMessageId?: number;
+  readonly senderId: number;
+  readonly repliedMessageId: number;
   readonly body: string;
-  readonly created_at: number;
+  readonly sent_time: number;
 }
 
-export class SaveUserMessageDto extends Message {
-  readonly recipientId: number;
+export class SaveDialogMessageDto extends Message {
+  readonly dialogId: number;
 }
 
 export class SaveGroupMessageDto extends Message {

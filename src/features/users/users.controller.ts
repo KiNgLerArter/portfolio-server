@@ -16,7 +16,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { EditRolesDto } from './dto/edit-roles-dto';
 import { UsersService } from './users.service';
 
-@Controller('users')
+@Controller()
 export class UsersController {
   constructor(private userService: UsersService) {}
 
