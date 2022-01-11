@@ -1,21 +1,23 @@
 import { RolesList } from '@common/types/roles.model';
 import {
+  BelongsTo,
   BelongsToMany,
   Column,
   DataType,
   Model,
   Table,
 } from 'sequelize-typescript';
+import { ChatGroup } from './chat-group.model';
 import { UsersRoles } from './combined/users-roles.model';
 import { User } from './user.model';
 
-interface RoleCreationAttrs {
+interface MessageCreationAttrs {
   value: string;
   description: string;
 }
 
-@Table({ tableName: 'roles' })
-export class Role extends Model<Role, RoleCreationAttrs> {
+@Table({ tableName: 'messages' })
+export class Message extends Model<Message, MessageCreationAttrs> {
   @Column({
     type: DataType.INTEGER,
     unique: true,
@@ -26,17 +28,15 @@ export class Role extends Model<Role, RoleCreationAttrs> {
 
   @Column({
     type: DataType.STRING,
-    unique: true,
     allowNull: false,
   })
-  value: RolesList;
+  body: string;
 
   @Column({
-    type: DataType.STRING,
-    allowNull: false,
+    type: DataType.NUMBER,
   })
-  description: string;
+  repliedMessageId: number;
 
-  @BelongsToMany(() => User, () => UsersRoles)
-  users: User[];
+  @BelongsTo(() => ChatGroup)
+  chatGroupId: ChatGroup;
 }

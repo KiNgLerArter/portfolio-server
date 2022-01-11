@@ -5,11 +5,10 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import { ChatGroup } from '@db-models/chat-group.model';
 import { User } from '@db-models/user.model';
 
-@Table({ tableName: 'user_chat_groups', createdAt: false, updatedAt: false })
-export class UserChatGroups extends Model<UserChatGroups> {
+@Table({ tableName: 'users_chats', createdAt: false, updatedAt: false })
+export class UsersChats extends Model<UsersChats> {
   @Column({
     type: DataType.INTEGER,
     unique: true,
@@ -24,9 +23,17 @@ export class UserChatGroups extends Model<UserChatGroups> {
   })
   userId: number;
 
-  @ForeignKey(() => ChatGroup)
+  @ForeignKey(null)
   @Column({
     type: DataType.INTEGER,
+    unique: 'id_type',
+    references: null,
   })
-  chatGroupId: number;
+  chatId: number;
+
+  @Column({
+    type: DataType.STRING,
+    unique: 'id_type',
+  })
+  chatType: string;
 }

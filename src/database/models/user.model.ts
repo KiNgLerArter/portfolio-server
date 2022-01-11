@@ -6,9 +6,10 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { Role } from './role.model';
-import { UserRoles } from './combined/user-roles.model';
+import { UsersRoles } from './combined/users-roles.model';
 import { ChatGroup } from './chat-group.model';
-import { UserChatGroups } from './combined/user-chat-groups.model';
+import { ChatDialog } from './chat-dialog.model';
+import { UsersChats } from './combined/users-chats.model';
 
 interface UserCreationAttrs {
   email: string;
@@ -50,9 +51,26 @@ export class User extends Model<User, UserCreationAttrs> {
   })
   banReason: string;
 
-  @BelongsToMany(() => Role, () => UserRoles)
+  @BelongsToMany(() => Role, () => UsersRoles)
   roles: Role[];
 
-  @BelongsToMany(() => ChatGroup, () => UserChatGroups)
+  @BelongsToMany(() => ChatDialog, {
+    through: {
+      model: () => UsersChats,
+      unique: false,
+    },
+    foreignKey: 'userId',
+    constraints: false,
+  })
+  chatDialogs: ChatDialog[];
+
+  @BelongsToMany(() => ChatGroup, {
+    through: {
+      model: () => UsersChats,
+      unique: false,
+    },
+    foreignKey: 'userId',
+    constraints: false,
+  })
   chatGroups: ChatGroup[];
 }

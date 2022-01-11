@@ -5,6 +5,7 @@ import { User } from '@db-models/user.model';
 import { BanUserDto } from './dto/ban-user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { EditRolesDto } from './dto/edit-roles-dto';
+import { RolesList } from '@common/types/roles.model';
 
 @Injectable()
 export class UsersService {
@@ -28,7 +29,7 @@ export class UsersService {
 
   async createUser(dto: CreateUserDto): Promise<User> {
     const user = await this.userRepository.create(dto);
-    await this.addRoles({ userId: user.id, roles: ['admin'] });
+    await this.addRoles({ userId: user.id, roles: [RolesList.USER] });
     return user;
   }
 

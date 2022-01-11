@@ -6,7 +6,7 @@ import { RolesModule } from '@features/roles/roles.module';
 import { UsersModule } from '@features/users/users.module';
 import { RouterModule } from '@nestjs/core';
 
-RouterModule.register([
+export const RoutingModule = RouterModule.register([
   {
     path: 'auth',
     module: AuthModule,

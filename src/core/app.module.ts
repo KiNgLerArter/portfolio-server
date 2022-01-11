@@ -6,10 +6,12 @@ import { UsersModule } from '../features/users/users.module';
 import { User } from '@db-models/user.model';
 import { RolesModule } from '../features/roles/roles.module';
 import { Role } from '@db-models/role.model';
-import { UserRoles } from '@db-models/combined/user-roles.model';
+import { UsersRoles } from '@db-models/combined/users-roles.model';
 import { AuthModule } from '../features/auth/auth.module';
 import { ChatGroup } from '@db-models/chat-group.model';
-import { UserChatGroups } from '@db-models/combined/user-chat-groups.model';
+import { ChatDialog } from '@db-models/chat-dialog.model';
+import { RoutingModule } from './app.routing.module';
+import { UsersChats } from '@db-models/combined/users-chats.model';
 
 @Module({
   imports: [
@@ -23,9 +25,11 @@ import { UserChatGroups } from '@db-models/combined/user-chat-groups.model';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      models: [User, Role, ChatGroup, UserRoles, UserChatGroups],
+      models: [User, Role, ChatDialog, ChatGroup, UsersRoles, UsersChats],
       autoLoadModels: true,
+      // sync: { force: true },
     }),
+    RoutingModule,
     ChatModule,
     UsersModule,
     RolesModule,

@@ -2,21 +2,19 @@ import {
   BelongsToMany,
   Column,
   DataType,
-  Index,
   Model,
   Table,
 } from 'sequelize-typescript';
 import { UsersChats } from './combined/users-chats.model';
 import { User } from './user.model';
 
-interface ChatGroupCreationAttrs {
+interface ChatDialogCreationAttrs {
   name: string;
-  icon: string;
-  memberIds: number[];
+  userIds: number[];
 }
 
-@Table({ tableName: 'chat_groups' })
-export class ChatGroup extends Model<ChatGroup, ChatGroupCreationAttrs> {
+@Table({ tableName: 'chat_dialogs' })
+export class ChatDialog extends Model<ChatDialog, ChatDialogCreationAttrs> {
   @Column({
     type: DataType.INTEGER,
     unique: true,
@@ -35,7 +33,7 @@ export class ChatGroup extends Model<ChatGroup, ChatGroupCreationAttrs> {
       model: () => UsersChats,
       unique: false,
       scope: {
-        chatType: 'group',
+        chatType: 'dialog',
       },
     },
     foreignKey: 'chatId',
