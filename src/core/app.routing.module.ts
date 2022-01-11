@@ -1,10 +1,8 @@
+import { RouterModule } from '@nestjs/core';
 import { AuthModule } from '@features/auth/auth.module';
 import { ChatModule } from '@features/chat/chat.module';
-import { ChatDialogModule } from '@features/chat/dialog/chat-dialog.module';
-import { ChatGroupModule } from '@features/chat/group/chat-group.module';
 import { RolesModule } from '@features/roles/roles.module';
 import { UsersModule } from '@features/users/users.module';
-import { RouterModule } from '@nestjs/core';
 
 export const RoutingModule = RouterModule.register([
   {
@@ -22,15 +20,15 @@ export const RoutingModule = RouterModule.register([
   {
     path: 'chat',
     module: ChatModule,
-    children: [
-      {
-        path: 'dialog',
-        module: ChatDialogModule,
-      },
-      {
-        path: 'group',
-        module: ChatGroupModule,
-      },
-    ],
+    // children: [
+    //   {
+    //     path: 'dialog',
+    //     module: ChatDialogModule,
+    //   },
+    //   {
+    //     path: 'group',
+    //     module: ChatGroupModule,
+    //   },
+    // ],
   },
 ]);

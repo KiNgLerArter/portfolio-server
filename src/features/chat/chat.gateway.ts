@@ -1,21 +1,15 @@
 import { Logger } from '@nestjs/common';
 import {
-  MessageBody,
   OnGatewayConnection,
   OnGatewayDisconnect,
   OnGatewayInit,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
-  WsResponse,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { ChatDialogService } from './dialog/chat-dialog.service';
-import {
-  SaveDialogMessageDto,
-  SaveGroupMessageDto,
-} from './dto/save-message.dto';
-import { ChatGroupService } from './group/chat-group.service';
+import { saveChatMessageDto } from './dto/save-chat-message.dto';
+import { MessageService } from './message/message.service';
 
 @WebSocketGateway({ cors: true, namespace: 'chat' })
 export class ChatGateway
@@ -24,13 +18,9 @@ export class ChatGateway
   @WebSocketServer() server: Server;
 
   private logger: Logger = new Logger('ChatGateway');
-  private dialogLogger: Logger = new Logger('ChatDialog');
-  private groupLogger: Logger = new Logger('ChatGroup');
+  private chatLogger: Logger = new Logger('Chat');
 
-  constructor(
-    private chatDialogService: ChatDialogService,
-    private chatGroupService: ChatGroupService,
-  ) {}
+  constructor(private messageService: MessageService) {}
 
   afterInit(server: Server) {
     this.logger.log(`WebSocket INITTED`);
@@ -44,16 +34,10 @@ export class ChatGateway
     this.logger.log(`Client disconnected: ${client.id}`);
   }
 
-  @SubscribeMessage('messageToDialog')
-  async handleMessageToUser(client: Socket, data: SaveDialogMessageDto) {
-    this.dialogLogger.log(`messageToDialog: ${data.body}`);
-    await this.chatDialogService.saveMessage(data);
-    this.server.to(`dialog-${data.dialogId}`).emit('messageFromDialog', data);
-  }
-
-  @SubscribeMessage('messageToGroup')
-  async handleMessageToGroup(@MessageBody() data: SaveGroupMessageDto) {
-    this.groupLogger.log(`messageToGroup: ${data.body}`);
-    this.server.to(`group-${data.groupId}`).emit('messageFromGroup', data);
+  @SubscribeMessage('messageToChat')
+  async handleMessageToUser(client: Socket, data: saveChatMessageDto.FE) {
+    this.chatLogger.log(`messageToChat: ${data.body}`);
+    await this.messageService.saveMessage(data);
+    this.server.to(`chat-${data.chatId}`).emit('messageFromChat', data);
   }
 }

@@ -4,16 +4,18 @@ import {
   BelongsToMany,
   Column,
   DataType,
+  ForeignKey,
   Model,
   Table,
 } from 'sequelize-typescript';
-import { ChatGroup } from './chat-group.model';
+import { Chat } from './chat.model';
 import { UsersRoles } from './combined/users-roles.model';
 import { User } from './user.model';
 
 interface MessageCreationAttrs {
   value: string;
   description: string;
+  chatId: number;
 }
 
 @Table({ tableName: 'messages' })
@@ -23,6 +25,7 @@ export class Message extends Model<Message, MessageCreationAttrs> {
     unique: true,
     autoIncrement: true,
     primaryKey: true,
+    allowNull: false,
   })
   id: number;
 
@@ -33,10 +36,16 @@ export class Message extends Model<Message, MessageCreationAttrs> {
   body: string;
 
   @Column({
-    type: DataType.NUMBER,
+    type: DataType.INTEGER,
+    allowNull: false,
+  })
+  msgOwnerId: number;
+
+  @Column({
+    type: DataType.INTEGER,
   })
   repliedMessageId: number;
 
-  @BelongsTo(() => ChatGroup)
-  chatGroupId: ChatGroup;
+  @ForeignKey(() => Chat)
+  chatId: string;
 }

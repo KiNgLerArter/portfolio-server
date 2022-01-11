@@ -7,9 +7,8 @@ import {
 } from 'sequelize-typescript';
 import { Role } from './role.model';
 import { UsersRoles } from './combined/users-roles.model';
-import { ChatGroup } from './chat-group.model';
-import { ChatDialog } from './chat-dialog.model';
 import { UsersChats } from './combined/users-chats.model';
+import { Chat } from './chat.model';
 
 interface UserCreationAttrs {
   email: string;
@@ -54,23 +53,6 @@ export class User extends Model<User, UserCreationAttrs> {
   @BelongsToMany(() => Role, () => UsersRoles)
   roles: Role[];
 
-  @BelongsToMany(() => ChatDialog, {
-    through: {
-      model: () => UsersChats,
-      unique: false,
-    },
-    foreignKey: 'userId',
-    constraints: false,
-  })
-  chatDialogs: ChatDialog[];
-
-  @BelongsToMany(() => ChatGroup, {
-    through: {
-      model: () => UsersChats,
-      unique: false,
-    },
-    foreignKey: 'userId',
-    constraints: false,
-  })
-  chatGroups: ChatGroup[];
+  @BelongsToMany(() => Chat, () => UsersChats)
+  chats: Chat[];
 }
