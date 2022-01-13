@@ -15,7 +15,7 @@ import { User } from './user.model';
 
 interface ChatCreationAttrs {
   name: string;
-  userIds: number[];
+  users: User[];
 }
 
 @Table({ tableName: 'chats' })
@@ -26,17 +26,12 @@ export class Chat extends Model<Chat, ChatCreationAttrs> {
     unique: true,
     primaryKey: true,
   })
-  id: number;
+  id: string;
 
   @Column({
     type: DataType.STRING,
   })
   name: string;
-
-  @Column({
-    type: DataType.STRING,
-  })
-  type: ChatTypes;
 
   @BelongsToMany(() => User, () => UsersChats)
   users: User[];

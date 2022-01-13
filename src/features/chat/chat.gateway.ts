@@ -8,7 +8,7 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { saveChatMessageDto } from './dto/save-chat-message.dto';
+import { saveChatMessageDto } from './message/dto/save-message.dto';
 import { MessageService } from './message/message.service';
 
 @WebSocketGateway({ cors: true, namespace: 'chat' })
@@ -27,11 +27,11 @@ export class ChatGateway
   }
 
   handleConnection(client: Socket, ...args: any[]) {
-    this.logger.log(`Client connected: ${client.id}`);
+    console.log('[client connected]:', client.id);
   }
 
   handleDisconnect(client: Socket) {
-    this.logger.log(`Client disconnected: ${client.id}`);
+    console.log('[client disconnected]:', client.id);
   }
 
   @SubscribeMessage('messageToChat')

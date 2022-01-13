@@ -13,9 +13,10 @@ import { UsersRoles } from './combined/users-roles.model';
 import { User } from './user.model';
 
 interface MessageCreationAttrs {
-  value: string;
-  description: string;
-  chatId: number;
+  body: string;
+  msgOwnerId: number;
+  chatId: string;
+  sentDate: string;
 }
 
 @Table({ tableName: 'messages' })
