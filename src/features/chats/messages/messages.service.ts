@@ -5,7 +5,7 @@ import { EditMessageDto } from './dto/edit-message.dto';
 import { SaveMessageDto } from './dto/save-message.dto';
 
 @Injectable()
-export class MessageService {
+export class MessagesService {
   constructor(
     @InjectModel(Message) private messageRepository: typeof Message,
   ) {}

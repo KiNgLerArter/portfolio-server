@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { ChatModule } from 'src/features/chat/chat.module';
+import { ChatModule } from '@features/chat/chats.module';
 import { UsersModule } from '../features/users/users.module';
 import { User } from '@db-models/user.model';
 import { RolesModule } from '../features/roles/roles.module';

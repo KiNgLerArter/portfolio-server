@@ -32,21 +32,21 @@ export class UsersController {
     return this.userService.getAllUsers();
   }
 
-  @Roles(RolesList.ADMIN)
+  @Roles(RolesList.MODER, RolesList.ADMIN)
   @UseGuards(RolesGuard)
   @Get('/:userId/get-roles')
   getRoles(@Param('userId') userId: number) {
     return this.userService.getRoles(userId);
   }
 
-  @Roles(RolesList.ADMIN)
+  @Roles(RolesList.MODER, RolesList.ADMIN)
   @UseGuards(RolesGuard)
   @Post('/add-roles')
   addRole(@Body() dto: EditRolesDto) {
     return this.userService.addRoles(dto);
   }
 
-  @Roles(RolesList.ADMIN)
+  @Roles(RolesList.MODER, RolesList.ADMIN)
   @UseGuards(RolesGuard)
   @Delete('/remove-roles')
   removeRole(@Body() dto: EditRolesDto) {

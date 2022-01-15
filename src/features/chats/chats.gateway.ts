@@ -8,11 +8,11 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { saveChatMessageDto } from './message/dto/save-message.dto';
-import { MessageService } from './message/message.service';
+import { SaveMessageDto } from './messages/dto/save-message.dto';
+import { MessagesService } from './messages/messages.service';
 
 @WebSocketGateway({ cors: true, namespace: 'chat' })
-export class ChatGateway
+export class ChatsGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
   @WebSocketServer() server: Server;
@@ -20,7 +20,7 @@ export class ChatGateway
   private logger: Logger = new Logger('ChatGateway');
   private chatLogger: Logger = new Logger('Chat');
 
-  constructor(private messageService: MessageService) {}
+  constructor(private messagesService: MessagesService) {}
 
   afterInit(server: Server) {
     this.logger.log(`WebSocket INITTED`);
@@ -35,9 +35,9 @@ export class ChatGateway
   }
 
   @SubscribeMessage('messageToChat')
-  async handleMessageToUser(client: Socket, data: saveChatMessageDto.FE) {
+  async handleMessageToUser(client: Socket, data: SaveMessageDto) {
     this.chatLogger.log(`messageToChat: ${data.body}`);
-    await this.messageService.saveMessage(data);
+    await this.messagesService.saveMessage(data);
     this.server.to(`chat-${data.chatId}`).emit('messageFromChat', data);
   }
 }
