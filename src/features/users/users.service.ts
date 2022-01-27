@@ -3,9 +3,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { User } from '@db-models/user.model';
 import { BanUserDto } from './dto/ban-user.dto';
-import { CreateUserDto } from './dto/create-user.dto';
 import { EditRolesDto } from './dto/edit-roles-dto';
 import { RolesList } from '@common/types/roles.model';
+import { userDto } from './dto/create-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -32,7 +32,7 @@ export class UsersService {
     return user;
   }
 
-  async createUser(dto: CreateUserDto): Promise<User> {
+  async createUser(dto: userDto.FE): Promise<User> {
     const user = await this.userRepository.create(dto);
     await this.addRoles({ userId: user.id, roles: [RolesList.USER] });
     return user;
@@ -40,13 +40,13 @@ export class UsersService {
 
   async banUser(dto: BanUserDto): Promise<User> {
     const user = await this.userRepository.findByPk(dto.userId);
-    user.update({ banReason: dto.banReason, banned: true });
+    user.update({ banReason: dto.banReason, isBanned: true });
     return user;
   }
 
   async unbanUser(dto: BanUserDto): Promise<User> {
     const user = await this.userRepository.findByPk(dto.userId);
-    user.update({ banReason: null, banned: false });
+    user.update({ banReason: null, isBanned: false });
     return user;
   }
 

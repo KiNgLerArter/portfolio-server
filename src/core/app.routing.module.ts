@@ -1,9 +1,9 @@
 import { RouterModule } from '@nestjs/core';
 import { AuthModule } from '@features/auth/auth.module';
-import { ChatModule } from '@features/chat/chats.module';
+import { ChatsModule } from '@features/chats/chats.module';
 import { RolesModule } from '@features/roles/roles.module';
 import { UsersModule } from '@features/users/users.module';
-import { MessageModule } from '@features/chat/message/messages.module';
+import { MessagesModule } from '@features/chats/messages/messages.module';
 
 export const RoutingModule = RouterModule.register([
   {
@@ -20,11 +20,11 @@ export const RoutingModule = RouterModule.register([
   },
   {
     path: 'chats',
-    module: ChatModule,
+    module: ChatsModule,
     children: [
       {
         path: 'message',
-        module: MessageModule,
+        module: MessagesModule,
       },
     ],
   },

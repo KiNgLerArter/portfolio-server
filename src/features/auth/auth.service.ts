@@ -1,5 +1,4 @@
 import { AuthTokens } from '@common/types/auth.model';
-import { CreateUserDto } from '@features/users/dto/create-user.dto';
 import { UsersService } from '@features/users/users.service';
 import { User } from '@db-models/user.model';
 import {
@@ -10,20 +9,19 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
+import { AuthUserDto } from './dtos/auth-user.dto';
+import { TokenService } from '@features/token/token.service';
+import { userDto } from '@features/users/dto/create-user.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
+    private tokenService: TokenService,
     private usersService: UsersService,
     private jwtService: JwtService,
   ) {}
 
-  async login(userDto: CreateUserDto): Promise<AuthTokens> {
-    const user = await this.validateUser(userDto);
-    return this.generateTokens(user);
-  }
-
-  async registration(userDto: CreateUserDto): Promise<AuthTokens> {
+  async registration(userDto: userDto.FE): Promise<userDto.BE> {
     const candidate = await this.usersService.getUserByEmail(userDto.email);
     if (candidate) {
       throw new HttpException(
@@ -38,17 +36,35 @@ export class AuthService {
       password: hashPassword,
     });
 
-    return this.generateTokens(user);
+    return this.generateAndSaveTokens(user);
   }
 
-  private generateTokens(user: User): AuthTokens {
-    const payload = { email: user.email, id: user.id, roles: user.roles };
-    return {
-      token: this.jwtService.sign(payload),
-    };
+  async login(userDto: userDto.FE): Promise<userDto.BE> {
+    const user = await this.validateUser(userDto);
+
+    return this.generateAndSaveTokens(user);
   }
 
-  private async validateUser(userDto: CreateUserDto): Promise<User> {
+  async logout(refreshToken: string): Promise<void> {
+    const token = await this.tokenService.removeToken(refreshToken);
+  }
+
+  async refresh(refreshToken: string): Promise<userDto.BE> {
+    if (!refreshToken) {
+      throw new HttpException('User is not logged in', HttpStatus.UNAUTHORIZED);
+    }
+
+    const tokenData = this.tokenService.validateRefreshToken(refreshToken);
+    const tokenFromDb = await this.tokenService.findToken(refreshToken);
+    if (!tokenData || !tokenFromDb) {
+      throw new HttpException('User is not logged in', HttpStatus.UNAUTHORIZED);
+    }
+
+    const user = await this.usersService.getUserByEmail(tokenData.email);
+    return this.generateAndSaveTokens(user);
+  }
+
+  private async validateUser(userDto: userDto.FE): Promise<User> {
     const user = await this.usersService.getUserByEmail(userDto.email);
     if (!user) {
       throw new UnauthorizedException({
@@ -65,5 +81,14 @@ export class AuthService {
     }
 
     return user;
+  }
+
+  private async generateAndSaveTokens(user: User): Promise<userDto.BE> {
+    const tokens = this.tokenService.generateTokens(user);
+    const authUserDto = new AuthUserDto(user);
+
+    await this.tokenService.saveToken(user.id, tokens.refreshToken);
+
+    return { ...tokens, user: authUserDto };
   }
 }

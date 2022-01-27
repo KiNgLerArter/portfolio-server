@@ -2,6 +2,7 @@ import {
   BelongsToMany,
   Column,
   DataType,
+  HasOne,
   Model,
   Table,
 } from 'sequelize-typescript';
@@ -9,6 +10,7 @@ import { Role } from './role.model';
 import { UsersRoles } from './combined/users-roles.model';
 import { UsersChats } from './combined/users-chats.model';
 import { Chat } from './chat.model';
+import { Token } from './token.model';
 
 interface UserCreationAttrs {
   email: string;
@@ -40,9 +42,16 @@ export class User extends Model<User, UserCreationAttrs> {
 
   @Column({
     type: DataType.BOOLEAN,
+    allowNull: false,
     defaultValue: false,
   })
-  banned: boolean;
+  isActivated: boolean;
+
+  @Column({
+    type: DataType.BOOLEAN,
+    defaultValue: false,
+  })
+  isBanned: boolean;
 
   @Column({
     type: DataType.STRING,
@@ -55,4 +64,7 @@ export class User extends Model<User, UserCreationAttrs> {
 
   @BelongsToMany(() => Chat, () => UsersChats)
   chats: Chat[];
+
+  @HasOne(() => Token)
+  token: Token;
 }

@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { ChatModule } from '@features/chat/chats.module';
+import { ChatsModule } from '@features/chats/chats.module';
 import { UsersModule } from '../features/users/users.module';
 import { User } from '@db-models/user.model';
 import { RolesModule } from '../features/roles/roles.module';
@@ -12,6 +12,7 @@ import { RoutingModule } from './app.routing.module';
 import { UsersChats } from '@db-models/combined/users-chats.model';
 import { Chat } from '@db-models/chat.model';
 import { Message } from '@db-models/message.model';
+import { Token } from '@db-models/token.model';
 
 @Module({
   imports: [
@@ -25,12 +26,11 @@ import { Message } from '@db-models/message.model';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      models: [User, Role, Chat, Message, UsersRoles, UsersChats],
+      models: [User, Role, Chat, Message, Token, UsersRoles, UsersChats],
       autoLoadModels: true,
-      // sync: { force: true },
     }),
     RoutingModule,
-    ChatModule,
+    ChatsModule,
     UsersModule,
     RolesModule,
     AuthModule,
