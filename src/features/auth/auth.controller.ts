@@ -8,27 +8,30 @@ import { AuthService } from './auth.service';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @Post('/registration')
+  @Post('registration')
   async registration(
     @Res({ passthrough: true }) res: Response,
     @Body() userDto: userDto.FE,
   ) {
     const userData = await this.authService.registration(userDto);
-    res.cookie('refreshToken', userData.refreshToken, {
-      maxAge: 30 * 24 * 60 * 60 * 1000,
-      httpOnly: true,
-    });
+    this.setRefreshTokenCookie(res, userData.refreshToken);
     return userData;
   }
 
-  @Post('/login')
-  login(@Body() userDto: userDto.FE) {
-    return this.authService.login(userDto);
+  @Post('login')
+  async login(
+    @Res({ passthrough: true }) res: Response,
+    @Body() userDto: userDto.FE,
+  ) {
+    const userData = await this.authService.login(userDto);
+    this.setRefreshTokenCookie(res, userData.refreshToken);
+    return userData;
   }
 
-  @Post('/logout')
+  @Get('logout')
   async logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
-    await this.authService.logout(req.cookies.refreshToken);
+    const { refreshToken } = req.cookies;
+    await this.authService.logout(refreshToken);
     res.clearCookie('refreshToken');
   }
 
@@ -39,6 +42,13 @@ export class AuthController {
   ) {
     const userData = await this.authService.refresh(req.cookies.refreshToken);
     res.cookie('refreshToken', userData.refreshToken, {
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+      httpOnly: true,
+    });
+  }
+
+  private setRefreshTokenCookie(res: Response, refreshToken: string): void {
+    res.cookie('refreshToken', refreshToken, {
       maxAge: 30 * 24 * 60 * 60 * 1000,
       httpOnly: true,
     });

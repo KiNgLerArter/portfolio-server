@@ -42,22 +42,23 @@ export class AuthService {
   async login(userDto: userDto.FE): Promise<userDto.BE> {
     const user = await this.validateUser(userDto);
 
+    console.log('[user]:', user);
     return this.generateAndSaveTokens(user);
   }
 
   async logout(refreshToken: string): Promise<void> {
-    const token = await this.tokenService.removeToken(refreshToken);
+    return this.tokenService.removeToken(refreshToken);
   }
 
   async refresh(refreshToken: string): Promise<userDto.BE> {
     if (!refreshToken) {
-      throw new HttpException('User is not logged in', HttpStatus.UNAUTHORIZED);
+      throw new UnauthorizedException('User is not logged in');
     }
 
     const tokenData = this.tokenService.validateRefreshToken(refreshToken);
     const tokenFromDb = await this.tokenService.findToken(refreshToken);
     if (!tokenData || !tokenFromDb) {
-      throw new HttpException('User is not logged in', HttpStatus.UNAUTHORIZED);
+      throw new UnauthorizedException('User is not logged in');
     }
 
     const user = await this.usersService.getUserByEmail(tokenData.email);
@@ -67,17 +68,16 @@ export class AuthService {
   private async validateUser(userDto: userDto.FE): Promise<User> {
     const user = await this.usersService.getUserByEmail(userDto.email);
     if (!user) {
-      throw new UnauthorizedException({
-        message: 'Incorrect email',
-      });
+      throw new UnauthorizedException('User with email does not exist');
     }
 
     const isPasswordCorrect = await bcrypt.compare(
       userDto.password,
       user.password,
     );
+    console.log('[isPasswordCorrect]:', isPasswordCorrect);
     if (!isPasswordCorrect) {
-      throw new UnauthorizedException({ message: 'Incorrect password' });
+      throw new UnauthorizedException('Incorrect password');
     }
 
     return user;

@@ -6,7 +6,15 @@ import { TokenService } from './token.service';
 
 @Module({
   providers: [TokenService],
-  imports: [SequelizeModule.forFeature([Token]), JwtModule],
+  imports: [
+    SequelizeModule.forFeature([Token]),
+    JwtModule.register({
+      secret: process.env.JWT_ACCESS_SECRET || 'SECRET',
+      signOptions: {
+        expiresIn: '30m',
+      },
+    }),
+  ],
   exports: [TokenService],
 })
 export class TokenModule {}

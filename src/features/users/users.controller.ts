@@ -12,7 +12,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { BanUserDto } from './dto/ban-user.dto';
-import { CreateUserDto } from './dto/create-user.dto';
+import { userDto } from './dto/create-user.dto';
 import { EditRolesDto } from './dto/edit-roles-dto';
 import { UsersService } from './users.service';
 
@@ -21,7 +21,7 @@ export class UsersController {
   constructor(private userService: UsersService) {}
 
   @Post()
-  create(@Body() userDto: CreateUserDto) {
+  create(@Body() userDto: userDto.FE) {
     return this.userService.createUser(userDto);
   }
 
