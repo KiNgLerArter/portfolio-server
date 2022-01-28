@@ -40,11 +40,11 @@ export class AuthController {
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const userData = await this.authService.refresh(req.cookies.refreshToken);
-    res.cookie('refreshToken', userData.refreshToken, {
-      maxAge: 30 * 24 * 60 * 60 * 1000,
-      httpOnly: true,
-    });
+    const { refreshToken } = req.cookies;
+    const userData = await this.authService.refresh(refreshToken);
+    console.log('["/refresh" refreshToken]:', userData.refreshToken);
+    this.setRefreshTokenCookie(res, userData.refreshToken);
+    return userData;
   }
 
   private setRefreshTokenCookie(res: Response, refreshToken: string): void {
