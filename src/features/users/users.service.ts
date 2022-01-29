@@ -6,6 +6,8 @@ import { BanUserDto } from './dto/ban-user.dto';
 import { EditRolesDto } from './dto/edit-roles-dto';
 import { RolesList } from '@common/types/roles.model';
 import { userDto } from './dto/create-user.dto';
+import { Role } from '@db-models/role.model';
+import { Chat } from '@db-models/chat.model';
 
 @Injectable()
 export class UsersService {
@@ -15,7 +17,13 @@ export class UsersService {
   ) {}
 
   async getAllUsers(): Promise<User[]> {
-    const users = await this.userRepository.findAll({ include: { all: true } });
+    const users = await this.userRepository.findAll({
+      include: [
+        { model: Role, through: { attributes: [] } },
+        { model: Chat, attributes: { include: ['id'] } },
+      ],
+      attributes: { exclude: ['token'] },
+    });
     return users;
   }
 

@@ -7,7 +7,6 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import { AuthUserDto } from './dtos/auth-user.dto';
 import { TokenService } from '@features/token/token.service';
@@ -18,7 +17,6 @@ export class AuthService {
   constructor(
     private tokenService: TokenService,
     private usersService: UsersService,
-    private jwtService: JwtService,
   ) {}
 
   async registration(userDto: userDto.FE): Promise<userDto.BE> {

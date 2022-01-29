@@ -42,9 +42,7 @@ export class RolesGuard implements CanActivate {
       req.user = user;
       return user.roles.some((role) => requiredRoles.includes(role.value));
     } catch (error) {
-      throw new ForbiddenException(
-        "User don't have permission to access this endpoint",
-      );
+      throw new UnauthorizedException({ message: 'User is not logged in' });
     }
   }
 }

@@ -11,10 +11,10 @@ import { TokenService } from './token.service';
     JwtModule.register({
       secret: process.env.JWT_ACCESS_SECRET || 'SECRET',
       signOptions: {
-        expiresIn: '30m',
+        expiresIn: '10s',
       },
     }),
   ],
-  exports: [TokenService],
+  exports: [TokenService, JwtModule],
 })
 export class TokenModule {}
