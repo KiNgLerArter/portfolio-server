@@ -1,5 +1,5 @@
 import { AuthTokens } from '@common/types/auth.model';
-import { userDto } from '@features/users/dto/create-user.dto';
+import { userDto } from '@features/users/dtos/create-user.dto';
 import { Body, Controller, Get, Post, Req, Res } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { AuthService } from './auth.service';

@@ -13,9 +13,9 @@ import { Roles } from '@common/decorators/roles.decorator';
 import { RolesGuard } from '@common/guards/roles.guard';
 import { RolesList } from '@common/types/roles.model';
 import { ChatsService } from './chats.service';
-import { CreateChatDto } from './dto/create-chat.dto';
-import { EditChatDto } from './dto/edit-chat.dto';
-import { GetFilteredChatsDto } from './dto/get-chats.dto';
+import { CreateChatDto } from './dtos/create-chat.dto';
+import { EditChatDto } from './dtos/edit-chat.dto';
+import { GetFilteredChatsDto } from './dtos/get-chats.dto';
 import { Chat } from '@db-models/chat.model';
 import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
 

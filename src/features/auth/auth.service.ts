@@ -10,7 +10,7 @@ import {
 import * as bcrypt from 'bcryptjs';
 import { AuthUserDto } from './dtos/auth-user.dto';
 import { TokenService } from '@features/token/token.service';
-import { userDto } from '@features/users/dto/create-user.dto';
+import { userDto } from '@features/users/dtos/create-user.dto';
 
 @Injectable()
 export class AuthService {

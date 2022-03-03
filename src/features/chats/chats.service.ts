@@ -3,9 +3,9 @@ import { UsersService } from '@features/users/users.service';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Op } from 'sequelize';
-import { CreateChatDto } from './dto/create-chat.dto';
-import { EditChatDto } from './dto/edit-chat.dto';
-import { GetFilteredChatsDto } from './dto/get-chats.dto';
+import { CreateChatDto } from './dtos/create-chat.dto';
+import { EditChatDto } from './dtos/edit-chat.dto';
+import { GetFilteredChatsDto } from './dtos/get-chats.dto';
 
 @Injectable()
 export class ChatsService {
@@ -30,8 +30,8 @@ export class ChatsService {
     return chats;
   }
 
-  async createChat({ name, userIds }: CreateChatDto): Promise<Chat> {
-    const users = await this.usersService.getUsersByIds(userIds);
+  async createChat({ name, usersIds }: CreateChatDto): Promise<Chat> {
+    const users = await this.usersService.getUsersByIds(usersIds);
     const chat = await this.chatRepository.create({ name, users });
 
     return chat;

@@ -1,4 +1,4 @@
 export class CreateChatDto {
   readonly name: string;
-  readonly userIds: number[];
+  readonly usersIds: number[];
 }

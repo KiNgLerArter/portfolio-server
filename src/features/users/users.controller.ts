@@ -9,11 +9,12 @@ import {
   Get,
   Param,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
-import { BanUserDto } from './dto/ban-user.dto';
-import { userDto } from './dto/create-user.dto';
-import { EditRolesDto } from './dto/edit-roles-dto';
+import { BanUserDto } from './dtos/ban-user.dto';
+import { userDto } from './dtos/create-user.dto';
+import { EditRolesDto } from './dtos/edit-roles-dto';
 import { UsersService } from './users.service';
 
 @Controller()
@@ -30,6 +31,13 @@ export class UsersController {
   @Get()
   getAll() {
     return this.userService.getAllUsers();
+  }
+
+  @Roles(RolesList.USER)
+  @UseGuards(RolesGuard)
+  @Get('/:userId')
+  getById(@Param('userId') userId: number) {
+    return this.userService.getUserById(userId);
   }
 
   @Roles(RolesList.MODER, RolesList.ADMIN)

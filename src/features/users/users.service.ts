@@ -2,10 +2,10 @@ import { RolesService } from '@features/roles/roles.service';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { User } from '@db-models/user.model';
-import { BanUserDto } from './dto/ban-user.dto';
-import { EditRolesDto } from './dto/edit-roles-dto';
+import { BanUserDto } from './dtos/ban-user.dto';
+import { EditRolesDto } from './dtos/edit-roles-dto';
 import { RolesList } from '@common/types/roles.model';
-import { userDto } from './dto/create-user.dto';
+import { userDto } from './dtos/create-user.dto';
 import { Role } from '@db-models/role.model';
 import { Chat } from '@db-models/chat.model';
 
@@ -25,6 +25,11 @@ export class UsersService {
       attributes: { exclude: ['token'] },
     });
     return users;
+  }
+
+  async getUserById(id: number): Promise<User> {
+    const user = await this.userRepository.findByPk(id);
+    return user;
   }
 
   async getUsersByIds(ids: number[]): Promise<User[]> {
