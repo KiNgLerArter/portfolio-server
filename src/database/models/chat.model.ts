@@ -15,7 +15,6 @@ import { User } from './user.model';
 
 interface ChatCreationAttrs {
   name: string;
-  users: User[];
 }
 
 @Table({ tableName: 'chats' })

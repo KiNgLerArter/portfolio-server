@@ -18,21 +18,23 @@ export class ChatsService {
     const chats = await (dto
       ? this.chatRepository.findAll({
           where: { name: { [Op.substring]: dto.name } },
+          include: { all: true },
         })
-      : this.chatRepository.findAll());
+      : this.chatRepository.findAll({ include: { all: true } }));
     return chats;
   }
 
-  async getUserChats(userId): Promise<Chat[]> {
+  async getUserChats(userId: number): Promise<Chat[]> {
     const chats = await this.chatRepository.findAll({
       where: { users: { id: userId } },
+      include: { all: true },
     });
     return chats;
   }
-
+  Ни;
   async createChat({ name, usersIds }: CreateChatDto): Promise<Chat> {
-    const users = await this.usersService.getUsersByIds(usersIds);
-    const chat = await this.chatRepository.create({ name, users });
+    const chat = await this.chatRepository.create({ name });
+    chat?.$add('users', usersIds);
 
     return chat;
   }
