@@ -45,9 +45,12 @@ export class UsersService {
     return user;
   }
 
-  async createUser(dto: userDto.FE): Promise<User> {
+  async createUser(
+    dto: userDto.FE,
+    roles: RolesList[] = [RolesList.USER],
+  ): Promise<User> {
     const user = await this.userRepository.create(dto);
-    await this.addRoles({ userId: user.id, roles: [RolesList.USER] });
+    await this.addRoles({ userId: user.id, roles });
     return user;
   }
 
@@ -91,5 +94,21 @@ export class UsersService {
       );
     }
     return user;
+  }
+
+  async createMockUsers(): Promise<void> {
+    const mockUsers: (userDto.FE & { roles: RolesList[] })[] = [
+      { email: 'user@user.com', password: 'user', roles: [RolesList.USER] },
+      { email: 'user1@user1.com', password: 'user1', roles: [RolesList.USER] },
+      { email: 'moder@moder.com', password: 'moder', roles: [RolesList.MODER] },
+      { email: 'admin@admin.com', password: 'admin', roles: [RolesList.ADMIN] },
+    ];
+
+    await this.userRepository.drop();
+    for (let i = 0; i < mockUsers.length; i++) {
+      const roles = mockUsers[i].roles;
+      delete mockUsers[i].roles;
+      await this.createUser(mockUsers[i], roles);
+    }
   }
 }
