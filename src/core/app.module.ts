@@ -13,6 +13,7 @@ import { UsersChats } from '@db-models/combined/users-chats.model';
 import { Chat } from '@db-models/chat.model';
 import { Message } from '@db-models/message.model';
 import { Token } from '@db-models/token.model';
+import { MockModule } from '@features/mock/mock.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { Token } from '@db-models/token.model';
     UsersModule,
     RolesModule,
     AuthModule,
+    MockModule,
   ],
   controllers: [],
 })

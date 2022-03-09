@@ -21,5 +21,6 @@ import { AuthModule } from '@features/auth/auth.module';
     AuthModule,
   ],
   controllers: [ChatsController],
+  exports: [ChatsService],
 })
 export class ChatsModule {}

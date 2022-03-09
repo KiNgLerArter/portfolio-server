@@ -24,16 +24,9 @@ export class RolesService {
     return roles;
   }
 
-  async createMockRoles(): Promise<void> {
-    const mockRoles: CreateRoleDto[] = [
-      { value: 'user', description: 'standard user' },
-      { value: 'moder', description: 'moderator' },
-      { value: 'admin', description: 'administrator' },
-    ];
-
-    await this.roleRepository.drop();
-    for (let i = 0; i < mockRoles.length; i++) {
-      await this.createRole(mockRoles[i]);
+  async createRoles(roles: CreateRoleDto[]): Promise<void> {
+    for (let i = 0; i < roles.length; i++) {
+      await this.createRole(roles[i]);
     }
   }
 }

@@ -1,9 +1,34 @@
+import { Chat } from '@db-models/chat.model';
+import { UsersChats } from '@db-models/combined/users-chats.model';
+import { UsersRoles } from '@db-models/combined/users-roles.model';
+import { Message } from '@db-models/message.model';
+import { Role } from '@db-models/role.model';
+import { Token } from '@db-models/token.model';
+import { User } from '@db-models/user.model';
+import { ChatsModule } from '@features/chats/chats.module';
+import { RolesModule } from '@features/roles/roles.module';
+import { UsersModule } from '@features/users/users.module';
 import { Module } from '@nestjs/common';
+import { SequelizeModule } from '@nestjs/sequelize';
 import { MockController } from './mock.controller';
 import { MockService } from './mock.service';
 
 @Module({
+  imports: [
+    SequelizeModule.forFeature([
+      User,
+      Chat,
+      Role,
+      Token,
+      Message,
+      UsersChats,
+      UsersRoles,
+    ]),
+    UsersModule,
+    RolesModule,
+    ChatsModule,
+  ],
   controllers: [MockController],
-  providers: [MockService]
+  providers: [MockService],
 })
 export class MockModule {}

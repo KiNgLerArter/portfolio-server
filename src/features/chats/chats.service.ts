@@ -31,10 +31,15 @@ export class ChatsService {
     });
     return chats;
   }
-  Ни;
+
   async createChat({ name, usersIds }: CreateChatDto): Promise<Chat> {
     const chat = await this.chatRepository.create({ name });
-    chat?.$add('users', usersIds);
+    if (usersIds) {
+      chat?.$add('users', usersIds);
+    } else {
+      const allUsersIds = await this.usersService.getAllUsersIds();
+      chat?.$add('users', allUsersIds);
+    }
 
     return chat;
   }
@@ -49,5 +54,11 @@ export class ChatsService {
   async deleteChat(id: string): Promise<void> {
     const chat = await this.chatRepository.findByPk(id);
     chat.destroy();
+  }
+
+  async createChats(chats: CreateChatDto[]) {
+    for (let i = 0; i < chats.length; i++) {
+      await this.createChat(chats[i]);
+    }
   }
 }

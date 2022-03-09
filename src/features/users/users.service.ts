@@ -27,6 +27,11 @@ export class UsersService {
     return users;
   }
 
+  async getAllUsersIds(): Promise<number[]> {
+    const users = await this.userRepository.findAll({ attributes: ['id'] });
+    return users.map((user) => user.id);
+  }
+
   async getUserById(id: number): Promise<User> {
     const user = await this.userRepository.findByPk(id);
     return user;
@@ -96,19 +101,15 @@ export class UsersService {
     return user;
   }
 
-  async createMockUsers(): Promise<void> {
-    const mockUsers: (userDto.FE & { roles: RolesList[] })[] = [
-      { email: 'user@user.com', password: 'user', roles: [RolesList.USER] },
-      { email: 'user1@user1.com', password: 'user1', roles: [RolesList.USER] },
-      { email: 'moder@moder.com', password: 'moder', roles: [RolesList.MODER] },
-      { email: 'admin@admin.com', password: 'admin', roles: [RolesList.ADMIN] },
-    ];
+  async createUsers(
+    dtos: (userDto.FE & { roles: RolesList[] })[],
+  ): Promise<void> {
+    const users = JSON.parse(JSON.stringify(dtos));
 
-    await this.userRepository.drop();
-    for (let i = 0; i < mockUsers.length; i++) {
-      const roles = mockUsers[i].roles;
-      delete mockUsers[i].roles;
-      await this.createUser(mockUsers[i], roles);
+    for (let i = 0; i < users.length; i++) {
+      const roles = users[i].roles;
+      delete users[i].roles;
+      await this.createUser(users[i], roles);
     }
   }
 }

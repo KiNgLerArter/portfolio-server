@@ -31,6 +31,6 @@ export const RoutingModule = RouterModule.register([
   },
   {
     path: 'mock',
-    module: MockModule
-  }
+    module: MockModule,
+  },
 ]);
