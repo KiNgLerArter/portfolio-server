@@ -33,7 +33,9 @@ export class UsersService {
   }
 
   async getUserById(id: number): Promise<User> {
-    const user = await this.userRepository.findByPk(id);
+    const user = await this.userRepository.findByPk(id, {
+      include: { all: true },
+    });
     return user;
   }
 
@@ -50,8 +52,14 @@ export class UsersService {
     return user;
   }
 
+  async getChats(userId: number): Promise<Chat[]> {
+    const user = await this.getUserById(userId);
+    console.log('[user]:', user);
+    return user.chats;
+  }
+
   async createUser(
-    dto: userDto.FE,
+    dto: userDto.Extended,
     roles: RolesList[] = [RolesList.USER],
   ): Promise<User> {
     const user = await this.userRepository.create(dto);
@@ -99,17 +107,5 @@ export class UsersService {
       );
     }
     return user;
-  }
-
-  async createUsers(
-    dtos: (userDto.FE & { roles: RolesList[] })[],
-  ): Promise<void> {
-    const users = JSON.parse(JSON.stringify(dtos));
-
-    for (let i = 0; i < users.length; i++) {
-      const roles = users[i].roles;
-      delete users[i].roles;
-      await this.createUser(users[i], roles);
-    }
   }
 }

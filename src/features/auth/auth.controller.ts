@@ -8,12 +8,12 @@ import { AuthService } from './auth.service';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @Post('registration')
-  async registration(
+  @Post('register')
+  async register(
     @Res({ passthrough: true }) res: Response,
-    @Body() userDto: userDto.FE,
+    @Body() userDto: userDto.Extended,
   ) {
-    const userData = await this.authService.registration(userDto);
+    const userData = await this.authService.register(userDto);
     this.setRefreshTokenCookie(res, userData.refreshToken);
     return userData;
   }
@@ -21,7 +21,7 @@ export class AuthController {
   @Post('login')
   async login(
     @Res({ passthrough: true }) res: Response,
-    @Body() userDto: userDto.FE,
+    @Body() userDto: userDto.Basic,
   ) {
     const userData = await this.authService.login(userDto);
     this.setRefreshTokenCookie(res, userData.refreshToken);
@@ -33,6 +33,7 @@ export class AuthController {
     const { refreshToken } = req.cookies;
     await this.authService.logout(refreshToken);
     res.clearCookie('refreshToken');
+    return;
   }
 
   @Get('refresh')

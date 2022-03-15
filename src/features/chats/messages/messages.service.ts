@@ -19,10 +19,10 @@ export class MessagesService {
     const message = await this.messageRepository.findByPk(id);
     message.destroy();
 
-    await this.messageRepository.update(
-      { repliedMessageId: null },
-      { where: { repliedMessageId: id } },
-    );
+    // await this.messageRepository.update(
+    //   { repliedMessageId: null },
+    //   { where: { repliedMessageId: id } },
+    // );
   }
 
   async editMessage({ id, body }: EditMessageDto): Promise<Message> {

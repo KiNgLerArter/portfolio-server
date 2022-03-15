@@ -1,11 +1,15 @@
 import { RolesList } from '@common/types/roles.model';
 import {
+  AllowNull,
   BelongsTo,
   BelongsToMany,
   Column,
   DataType,
   ForeignKey,
+  HasMany,
+  HasOne,
   Model,
+  PrimaryKey,
   Table,
 } from 'sequelize-typescript';
 import { Chat } from './chat.model';
@@ -36,17 +40,39 @@ export class Message extends Model<Message, MessageCreationAttrs> {
   })
   body: string;
 
+  @BelongsTo(() => User)
+  owner: User;
+
+  @ForeignKey(() => User)
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
+    primaryKey: true,
   })
-  msgOwnerId: number;
+  ownerId: number;
 
-  @Column({
-    type: DataType.INTEGER,
-  })
-  repliedMessageId: number;
+  @BelongsTo(() => Chat)
+  chat: Chat;
 
   @ForeignKey(() => Chat)
+  @Column({
+    type: DataType.UUID,
+    allowNull: false,
+    primaryKey: true,
+  })
   chatId: string;
+
+  @BelongsTo(() => Message)
+  repliedOnMessage: Message;
+
+  @ForeignKey(() => Message)
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: true,
+    primaryKey: true,
+  })
+  repliedOnMessageId: number;
+
+  @HasMany(() => Message)
+  repliedMessages: Message[];
 }

@@ -29,11 +29,6 @@ export class ChatsController {
     return this.chatsService.getChats(dto);
   }
 
-  @Get('user/:userId')
-  async getUserChats(@Param('userId') userId: string): Promise<Chat[]> {
-    return this.chatsService.getUserChats(Number(userId));
-  }
-
   @Post('create')
   async createChat(@Body() dto: CreateChatDto): Promise<Chat> {
     return this.chatsService.createChat(dto);

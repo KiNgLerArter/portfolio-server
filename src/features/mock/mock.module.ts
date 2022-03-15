@@ -5,6 +5,7 @@ import { Message } from '@db-models/message.model';
 import { Role } from '@db-models/role.model';
 import { Token } from '@db-models/token.model';
 import { User } from '@db-models/user.model';
+import { AuthModule } from '@features/auth/auth.module';
 import { ChatsModule } from '@features/chats/chats.module';
 import { RolesModule } from '@features/roles/roles.module';
 import { UsersModule } from '@features/users/users.module';
@@ -24,7 +25,7 @@ import { MockService } from './mock.service';
       UsersChats,
       UsersRoles,
     ]),
-    UsersModule,
+    AuthModule,
     RolesModule,
     ChatsModule,
   ],

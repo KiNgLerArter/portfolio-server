@@ -2,9 +2,11 @@ import {
   BelongsToMany,
   Column,
   DataType,
+  ForeignKey,
   HasMany,
   Index,
   Model,
+  PrimaryKey,
   Table,
 } from 'sequelize-typescript';
 

@@ -16,7 +16,6 @@ import { AuthModule } from '@features/auth/auth.module';
   providers: [ChatsGateway, ChatsService],
   imports: [
     SequelizeModule.forFeature([User, Chat, UsersChats]),
-    UsersModule,
     MessagesModule,
     AuthModule,
   ],

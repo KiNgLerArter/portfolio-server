@@ -22,27 +22,31 @@ export class UsersController {
   constructor(private userService: UsersService) {}
 
   @Post()
-  create(@Body() userDto: userDto.FE) {
+  create(@Body() userDto: userDto.Extended) {
     return this.userService.createUser(userDto);
   }
 
-  @Roles(RolesList.USER)
-  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard)
   @Get()
   getAll() {
     return this.userService.getAllUsers();
   }
 
-  @Roles(RolesList.USER)
-  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard)
   @Get('/:userId')
   getById(@Param('userId') userId: number) {
     return this.userService.getUserById(userId);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Get('/:userId/chats')
+  getChats(@Param('userId') userId: number) {
+    return this.userService.getChats(userId);
+  }
+
   @Roles(RolesList.MODER, RolesList.ADMIN)
   @UseGuards(RolesGuard)
-  @Get('/:userId/get-roles')
+  @Get('/:userId/roles')
   getRoles(@Param('userId') userId: number) {
     return this.userService.getRoles(userId);
   }

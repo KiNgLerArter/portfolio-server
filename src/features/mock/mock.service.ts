@@ -5,6 +5,7 @@ import { Message } from '@db-models/message.model';
 import { Role } from '@db-models/role.model';
 import { Token } from '@db-models/token.model';
 import { User } from '@db-models/user.model';
+import { AuthService } from '@features/auth/auth.service';
 import { ChatsService } from '@features/chats/chats.service';
 import { RolesService } from '@features/roles/roles.service';
 import { UsersService } from '@features/users/users.service';
@@ -23,14 +24,14 @@ export class MockService {
     @InjectModel(Token) private tokensRepo: typeof Token,
     @InjectModel(Message) private messagesRepo: typeof Message,
     private rolesService: RolesService,
-    private usersService: UsersService,
+    private authService: AuthService,
     private chatsService: ChatsService,
   ) {}
 
   async fillDB(): Promise<void> {
     await this.clearDB();
     await this.rolesService.createRoles(mockRoles);
-    await this.usersService.createUsers(mockUsers);
+    await this.authService.registerUsers(mockUsers);
     await this.chatsService.createChats(mockChats);
   }
 

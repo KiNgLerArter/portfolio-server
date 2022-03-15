@@ -3,7 +3,7 @@ import { CreateChatDto } from '@features/chats/dtos/create-chat.dto';
 import { CreateRoleDto } from '@features/roles/dto/create-role.dto';
 import { userDto } from '@features/users/dtos/create-user.dto';
 
-export const mockUsers: (userDto.FE & { roles: RolesList[] })[] = [
+export const mockUsers: (userDto.Extended & { roles: RolesList[] })[] = [
   {
     nickname: 'admin',
     email: 'admin@admin.com',

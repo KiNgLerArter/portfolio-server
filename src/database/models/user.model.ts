@@ -15,6 +15,7 @@ import { Token } from './token.model';
 interface UserCreationAttrs {
   email: string;
   password: string;
+  nickname: string;
 }
 
 @Table({ tableName: 'users' })

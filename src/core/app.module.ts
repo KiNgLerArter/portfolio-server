@@ -29,6 +29,7 @@ import { MockModule } from '@features/mock/mock.module';
       database: process.env.POSTGRES_DB,
       models: [User, Role, Chat, Message, Token, UsersRoles, UsersChats],
       autoLoadModels: true,
+      // sync: { force: true },
     }),
     RoutingModule,
     ChatsModule,

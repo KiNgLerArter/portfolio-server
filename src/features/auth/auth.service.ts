@@ -11,6 +11,7 @@ import * as bcrypt from 'bcryptjs';
 import { AuthUserDto } from './dtos/auth-user.dto';
 import { TokenService } from '@features/token/token.service';
 import { userDto } from '@features/users/dtos/create-user.dto';
+import { RolesList } from '@common/types/roles.model';
 
 @Injectable()
 export class AuthService {
@@ -19,7 +20,10 @@ export class AuthService {
     private usersService: UsersService,
   ) {}
 
-  async registration(userDto: userDto.FE): Promise<userDto.BE> {
+  async register(
+    userDto: userDto.Extended,
+    roles: RolesList[] = undefined,
+  ): Promise<userDto.BE> {
     const candidate = await this.usersService.getUserByEmail(userDto.email);
     if (candidate) {
       throw new HttpException(
@@ -29,15 +33,18 @@ export class AuthService {
     }
 
     const hashPassword = await bcrypt.hash(userDto.password, 5);
-    const user = await this.usersService.createUser({
-      ...userDto,
-      password: hashPassword,
-    });
+    const user = await this.usersService.createUser(
+      {
+        ...userDto,
+        password: hashPassword,
+      },
+      roles,
+    );
 
     return this.generateAndSaveTokens(user);
   }
 
-  async login(userDto: userDto.FE): Promise<userDto.BE> {
+  async login(userDto: userDto.Basic): Promise<userDto.BE> {
     const user = await this.validateUser(userDto);
 
     console.log('[user]:', user);
@@ -63,7 +70,19 @@ export class AuthService {
     return this.generateAndSaveTokens(user);
   }
 
-  private async validateUser(userDto: userDto.FE): Promise<User> {
+  async registerUsers(
+    userDtos: (userDto.Extended & { roles: RolesList[] })[],
+  ): Promise<void> {
+    const users = JSON.parse(JSON.stringify(userDtos));
+
+    for (let i = 0; i < users.length; i++) {
+      const roles = users[i].roles;
+      delete users[i].roles;
+      await this.register(users[i], roles);
+    }
+  }
+
+  private async validateUser(userDto: userDto.Basic): Promise<User> {
     const user = await this.usersService.getUserByEmail(userDto.email);
     if (!user) {
       throw new UnauthorizedException('User with email does not exist');

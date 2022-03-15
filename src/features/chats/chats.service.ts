@@ -9,10 +9,7 @@ import { GetFilteredChatsDto } from './dtos/get-chats.dto';
 
 @Injectable()
 export class ChatsService {
-  constructor(
-    @InjectModel(Chat) private chatRepository: typeof Chat,
-    private usersService: UsersService,
-  ) {}
+  constructor(@InjectModel(Chat) private chatRepository: typeof Chat) {}
 
   async getChats(dto: GetFilteredChatsDto): Promise<Chat[]> {
     const chats = await (dto
@@ -24,21 +21,10 @@ export class ChatsService {
     return chats;
   }
 
-  async getUserChats(userId: number): Promise<Chat[]> {
-    const chats = await this.chatRepository.findAll({
-      where: { users: { id: userId } },
-      include: { all: true },
-    });
-    return chats;
-  }
-
   async createChat({ name, usersIds }: CreateChatDto): Promise<Chat> {
     const chat = await this.chatRepository.create({ name });
     if (usersIds) {
       chat?.$add('users', usersIds);
-    } else {
-      const allUsersIds = await this.usersService.getAllUsersIds();
-      chat?.$add('users', allUsersIds);
     }
 
     return chat;
