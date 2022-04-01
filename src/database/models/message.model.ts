@@ -18,9 +18,10 @@ import { User } from './user.model';
 
 interface MessageCreationAttrs {
   body: string;
-  msgOwnerId: number;
-  chatId: string;
   sentDate: string;
+  ownerId: number;
+  chatId: string;
+  repliedOnMessageId?: number;
 }
 
 @Table({ tableName: 'messages' })
@@ -40,36 +41,30 @@ export class Message extends Model<Message, MessageCreationAttrs> {
   })
   body: string;
 
-  @BelongsTo(() => User)
-  owner: User;
+  @Column({
+    type: DataType.DATE,
+  })
+  sentDate: string;
 
-  @ForeignKey(() => User)
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
-    primaryKey: true,
   })
   ownerId: number;
 
-  @BelongsTo(() => Chat)
+  @BelongsTo(() => Chat, 'chatId')
   chat: Chat;
 
   @ForeignKey(() => Chat)
-  @Column({
-    type: DataType.UUID,
-    allowNull: false,
-    primaryKey: true,
-  })
+  @Column({ type: DataType.UUID })
   chatId: string;
 
-  @BelongsTo(() => Message)
+  @BelongsTo(() => Message, 'repliedOnMessageId')
   repliedOnMessage: Message;
 
   @ForeignKey(() => Message)
   @Column({
     type: DataType.INTEGER,
-    allowNull: true,
-    primaryKey: true,
   })
   repliedOnMessageId: number;
 

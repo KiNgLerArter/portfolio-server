@@ -1,4 +1,5 @@
 import { Chat } from '@db-models/chat.model';
+import { Message } from '@db-models/message.model';
 import { UsersService } from '@features/users/users.service';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
@@ -12,12 +13,17 @@ export class ChatsService {
   constructor(@InjectModel(Chat) private chatRepository: typeof Chat) {}
 
   async getChats(dto: GetFilteredChatsDto): Promise<Chat[]> {
+    console.log('[😈😈getChats called😈😈]');
     const chats = await (dto
       ? this.chatRepository.findAll({
           where: { name: { [Op.substring]: dto.name } },
-          include: { all: true },
+          include: [Message],
         })
-      : this.chatRepository.findAll({ include: { all: true } }));
+      : this.chatRepository.findAll({ include: [Message] }));
+    console.log('[😈😈chats😈😈]:', chats);
+    chats.forEach((chat) => {
+      console.log('[😈😈chat.messages😈😈]:', chat.messages);
+    });
     return chats;
   }
 
@@ -37,12 +43,20 @@ export class ChatsService {
     return chat;
   }
 
+  async getChatById(id: string): Promise<Chat> {
+    const chat = await this.chatRepository.findByPk(id, {
+      include: { all: true },
+    });
+
+    return chat;
+  }
+
   async deleteChat(id: string): Promise<void> {
     const chat = await this.chatRepository.findByPk(id);
     chat.destroy();
   }
 
-  async createChats(chats: CreateChatDto[]) {
+  async createChats(chats: CreateChatDto[]): Promise<void> {
     for (let i = 0; i < chats.length; i++) {
       await this.createChat(chats[i]);
     }

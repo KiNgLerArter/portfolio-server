@@ -1,7 +1,7 @@
 export class SaveMessageDto {
   readonly chatId: string;
-  readonly msgOwnerId: number;
+  readonly ownerId: number;
   readonly body: string;
-  readonly repliedMessageId?: number;
+  readonly repliedOnMessageId?: number;
   readonly sentDate: string;
 }

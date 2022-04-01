@@ -24,7 +24,7 @@ export const RoutingModule = RouterModule.register([
     module: ChatsModule,
     children: [
       {
-        path: 'message',
+        path: 'messages',
         module: MessagesModule,
       },
     ],

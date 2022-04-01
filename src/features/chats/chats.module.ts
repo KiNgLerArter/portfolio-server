@@ -8,16 +8,17 @@ import { ChatsController } from './chats.controller';
 import { UsersChats } from '@db-models/combined/users-chats.model';
 import { User } from '@db-models/user.model';
 import { Chat } from '@db-models/chat.model';
-import { MessagesModule } from './messages/messages.module';
 import { UsersModule } from '@features/users/users.module';
 import { AuthModule } from '@features/auth/auth.module';
+import { Message } from '@db-models/message.model';
+import { MessagesModule } from './messages/messages.module';
 
 @Module({
   providers: [ChatsGateway, ChatsService],
   imports: [
     SequelizeModule.forFeature([User, Chat, UsersChats]),
-    MessagesModule,
     AuthModule,
+    MessagesModule,
   ],
   controllers: [ChatsController],
   exports: [ChatsService],

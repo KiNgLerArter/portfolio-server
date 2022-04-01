@@ -8,6 +8,7 @@ import { RolesList } from '@common/types/roles.model';
 import { userDto } from './dtos/create-user.dto';
 import { Role } from '@db-models/role.model';
 import { Chat } from '@db-models/chat.model';
+import { Message } from '@db-models/message.model';
 
 @Injectable()
 export class UsersService {
@@ -52,9 +53,13 @@ export class UsersService {
     return user;
   }
 
-  async getChats(userId: number): Promise<Chat[]> {
-    const user = await this.getUserById(userId);
-    console.log('[user]:', user);
+  async getChats(id: number): Promise<Chat[]> {
+    const user = await this.userRepository.findByPk(id, {
+      include: { model: Chat, include: [Message] },
+    });
+
+    console.log('[😈😈user.chats😈😈]:', user.chats);
+
     return user.chats;
   }
 

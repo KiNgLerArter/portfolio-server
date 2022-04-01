@@ -8,10 +8,11 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { SaveMessageDto } from './messages/dto/save-message.dto';
+import { ChatsService } from './chats.service';
+import { SaveMessageDto } from './messages/dtos/save-message.dto';
 import { MessagesService } from './messages/messages.service';
 
-@WebSocketGateway({ cors: true, namespace: 'chat' })
+@WebSocketGateway({ cors: true, namespace: 'chats' })
 export class ChatsGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
@@ -34,10 +35,23 @@ export class ChatsGateway
     console.log('[client disconnected]:', client.id);
   }
 
-  @SubscribeMessage('messageToChat')
-  async handleMessageToUser(client: Socket, data: SaveMessageDto) {
-    this.chatLogger.log(`messageToChat: ${data.body}`);
-    await this.messagesService.saveMessage(data);
-    this.server.to(`chat-${data.chatId}`).emit('messageFromChat', data);
+  @SubscribeMessage('join chats')
+  async onJoinChats(client: Socket, chatIds: string[]) {
+    console.log('[😈😈joined chats😈😈]:', chatIds);
+    client.join(chatIds);
+  }
+
+  @SubscribeMessage('leave chats')
+  async onLeaveChats(client: Socket, chatIds: string[]) {
+    console.log('[leaved chats😈😈]:', chatIds);
+    chatIds.forEach((id) => {
+      client.leave(id);
+    });
+  }
+
+  @SubscribeMessage('send message')
+  async onMessage(client: Socket, message: SaveMessageDto) {
+    await this.messagesService.saveMessage(message);
+    this.server.to(message.chatId).emit('receive message', message);
   }
 }

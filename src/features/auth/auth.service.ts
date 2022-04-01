@@ -47,7 +47,6 @@ export class AuthService {
   async login(userDto: userDto.Basic): Promise<userDto.BE> {
     const user = await this.validateUser(userDto);
 
-    console.log('[user]:', user);
     return this.generateAndSaveTokens(user);
   }
 
