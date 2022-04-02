@@ -28,22 +28,20 @@ export class ChatsGateway
   }
 
   handleConnection(client: Socket, ...args: any[]) {
-    console.log('[client connected]:', client.id);
+    console.log('[😈😈client connected😈😈]:', client.id);
   }
 
   handleDisconnect(client: Socket) {
-    console.log('[client disconnected]:', client.id);
+    console.log('[😈😈client disconnected😈😈]:', client.id);
   }
 
   @SubscribeMessage('join chats')
   async onJoinChats(client: Socket, chatIds: string[]) {
-    console.log('[😈😈joined chats😈😈]:', chatIds);
     client.join(chatIds);
   }
 
   @SubscribeMessage('leave chats')
   async onLeaveChats(client: Socket, chatIds: string[]) {
-    console.log('[leaved chats😈😈]:', chatIds);
     chatIds.forEach((id) => {
       client.leave(id);
     });
@@ -51,7 +49,7 @@ export class ChatsGateway
 
   @SubscribeMessage('send message')
   async onMessage(client: Socket, message: SaveMessageDto) {
-    await this.messagesService.saveMessage(message);
-    this.server.to(message.chatId).emit('receive message', message);
+    const savedMessage = await this.messagesService.saveMessage(message);
+    this.server.to(message.chatId).emit('receive message', savedMessage);
   }
 }
