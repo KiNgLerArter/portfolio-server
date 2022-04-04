@@ -43,12 +43,13 @@ export class ChatsService {
     return chat;
   }
 
-  async getChatById(id: string): Promise<Chat> {
-    const chat = await this.chatRepository.findByPk(id, {
+  async getChatsByIds(ids: string[]): Promise<Chat[]> {
+    const chats = await this.chatRepository.findAll({
+      where: { id: ids },
       include: { all: true },
     });
 
-    return chat;
+    return chats;
   }
 
   async deleteChat(id: string): Promise<void> {

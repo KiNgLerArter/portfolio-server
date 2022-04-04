@@ -58,8 +58,6 @@ export class UsersService {
       include: { model: Chat, include: [Message] },
     });
 
-    console.log('[😈😈user.chats😈😈]:', user.chats);
-
     return user.chats;
   }
 
