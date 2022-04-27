@@ -9,6 +9,7 @@ import { userDto } from './dtos/create-user.dto';
 import { Role } from '@db-models/role.model';
 import { Chat } from '@db-models/chat.model';
 import { Message } from '@db-models/message.model';
+import { UsersChats } from '@db-models/combined/users-chats.model';
 
 @Injectable()
 export class UsersService {
@@ -55,7 +56,11 @@ export class UsersService {
 
   async getChats(id: number): Promise<Chat[]> {
     const user = await this.userRepository.findByPk(id, {
-      include: { model: Chat, include: [Message] },
+      include: {
+        model: Chat,
+        include: [Message],
+        attributes: { exclude: ['UsersChats'] },
+      },
     });
 
     return user.chats;
