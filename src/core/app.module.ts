@@ -14,6 +14,7 @@ import { Chat } from '@db-models/chat.model';
 import { Message } from '@db-models/message.model';
 import { Token } from '@db-models/token.model';
 import { MockModule } from '@features/mock/mock.module';
+import { rejects } from 'assert';
 
 @Module({
   imports: [
