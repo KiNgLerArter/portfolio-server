@@ -1,7 +1,9 @@
 import {
+  AllowNull,
   BelongsToMany,
   Column,
   DataType,
+  HasMany,
   HasOne,
   Model,
   Table,
@@ -11,6 +13,7 @@ import { UsersRoles } from './combined/users-roles.model';
 import { UsersChats } from './combined/users-chats.model';
 import { Chat } from './chat.model';
 import { Token } from './token.model';
+import { Message } from './message.model';
 
 interface UserCreationAttrs {
   email: string;
@@ -81,6 +84,9 @@ export class User extends Model<User, UserCreationAttrs> {
 
   @BelongsToMany(() => Chat, () => UsersChats)
   chats: Chat[];
+
+  @HasMany(() => Message, 'ownerId')
+  messages: Message[];
 
   @HasOne(() => Token)
   token: Token;

@@ -7,7 +7,7 @@ export class MockController {
 
   @Get('fill-db')
   fillDB(): Promise<void> {
-    console.log('[fill-db called]');
+    console.log('[😈😈fill-db called😈😈]');
     return this.mockService.fillDB();
   }
 }

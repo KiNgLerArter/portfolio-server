@@ -1,4 +1,4 @@
-import { AuthTokens } from '@common/types/auth.model';
+import { AuthTokens } from '@common/types/auth.types';
 import { UsersService } from '@features/users/users.service';
 import { User } from '@db-models/user.model';
 import {
@@ -11,7 +11,7 @@ import * as bcrypt from 'bcryptjs';
 import { AuthUserDto } from './dtos/auth-user.dto';
 import { TokenService } from '@features/token/token.service';
 import { userDto } from '@features/users/dtos/create-user.dto';
-import { RolesList } from '@common/types/roles.model';
+import { RolesList } from '@common/types/roles.types';
 
 @Injectable()
 export class AuthService {
@@ -91,7 +91,6 @@ export class AuthService {
       userDto.password,
       user.password,
     );
-    console.log('[isPasswordCorrect]:', isPasswordCorrect);
     if (!isPasswordCorrect) {
       throw new UnauthorizedException('Incorrect password');
     }

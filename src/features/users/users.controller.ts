@@ -1,7 +1,7 @@
 import { Roles } from '@common/decorators/roles.decorator';
 import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
 import { RolesGuard } from '@common/guards/roles.guard';
-import { RolesList } from '@common/types/roles.model';
+import { RolesList } from '@common/types/roles.types';
 import {
   Body,
   Controller,
@@ -14,7 +14,7 @@ import {
 } from '@nestjs/common';
 import { BanUserDto } from './dtos/ban-user.dto';
 import { userDto } from './dtos/create-user.dto';
-import { EditRolesDto } from './dtos/edit-roles-dto';
+import { EditRolesDto } from './dtos/edit-roles.dto';
 import { UsersService } from './users.service';
 
 @Controller()
@@ -42,6 +42,12 @@ export class UsersController {
   @Get('/:userId/chats')
   getChats(@Param('userId') userId: number) {
     return this.userService.getChats(userId);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/:userId/chats-previews')
+  getChatsPreviews(@Param('userId') userId: number) {
+    return this.userService.getChatsPreviews(userId);
   }
 
   @Roles(RolesList.MODER, RolesList.ADMIN)

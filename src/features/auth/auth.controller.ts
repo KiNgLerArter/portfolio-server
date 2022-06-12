@@ -1,4 +1,4 @@
-import { AuthTokens } from '@common/types/auth.model';
+import { AuthTokens } from '@common/types/auth.types';
 import { userDto } from '@features/users/dtos/create-user.dto';
 import { Body, Controller, Get, Post, Req, Res } from '@nestjs/common';
 import { Request, Response } from 'express';
@@ -43,7 +43,6 @@ export class AuthController {
   ) {
     const { refreshToken } = req.cookies;
     const userData = await this.authService.refresh(refreshToken);
-    console.log('["/refresh" refreshToken]:', userData.refreshToken);
     this.setRefreshTokenCookie(res, userData.refreshToken);
     return userData;
   }

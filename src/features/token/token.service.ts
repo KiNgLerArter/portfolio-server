@@ -1,4 +1,4 @@
-import { AuthTokens } from '@common/types/auth.model';
+import { AuthTokens } from '@common/types/auth.types';
 import { Token } from '@db-models/token.model';
 import { User } from '@db-models/user.model';
 import { Injectable } from '@nestjs/common';

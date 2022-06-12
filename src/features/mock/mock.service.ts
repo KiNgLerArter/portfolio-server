@@ -10,7 +10,7 @@ import { ChatsService } from '@features/chats/chats.service';
 import { RolesService } from '@features/roles/roles.service';
 import { UsersService } from '@features/users/users.service';
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/sequelize';
+import { InjectModel, SequelizeModule } from '@nestjs/sequelize';
 import { mockChats, mockRoles, mockUsers } from './mock.data';
 
 @Injectable()
@@ -36,26 +36,26 @@ export class MockService {
   }
 
   private async clearDB(): Promise<any> {
-    await this.usersChatsRepo.truncate({
-      cascade: true,
+    await this.usersChatsRepo.sync({
+      force: true,
     });
-    await this.usersRolesRepo.truncate({
-      cascade: true,
+    await this.usersRolesRepo.sync({
+      force: true,
     });
-    await this.usersRepo.truncate({
-      cascade: true,
+    await this.usersRepo.sync({
+      force: true,
     });
-    await this.rolesRepo.truncate({
-      cascade: true,
+    await this.rolesRepo.sync({
+      force: true,
     });
-    await this.tokensRepo.truncate({
-      cascade: true,
+    await this.tokensRepo.sync({
+      force: true,
     });
-    await this.messagesRepo.truncate({
-      cascade: true,
+    await this.messagesRepo.sync({
+      force: true,
     });
-    await this.chatsRepo.truncate({
-      cascade: true,
+    await this.chatsRepo.sync({
+      force: true,
     });
   }
 }

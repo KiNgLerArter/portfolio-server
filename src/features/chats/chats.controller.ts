@@ -11,7 +11,7 @@ import {
 
 import { Roles } from '@common/decorators/roles.decorator';
 import { RolesGuard } from '@common/guards/roles.guard';
-import { RolesList } from '@common/types/roles.model';
+import { RolesList } from '@common/types/roles.types';
 import { ChatsService } from './chats.service';
 import { CreateChatDto } from './dtos/create-chat.dto';
 import { EditChatDto } from './dtos/edit-chat.dto';
@@ -27,6 +27,11 @@ export class ChatsController {
   @Get()
   async getChats(@Body() dto: GetFilteredChatsDto = null): Promise<Chat[]> {
     return this.chatsService.getChats(dto);
+  }
+
+  @Get(':chatId')
+  async getChatById(@Param('chatId') chatId: string) {
+    return this.chatsService.getChatById(chatId);
   }
 
   @Post('create')

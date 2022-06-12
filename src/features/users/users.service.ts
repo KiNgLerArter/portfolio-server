@@ -3,13 +3,14 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { User } from '@db-models/user.model';
 import { BanUserDto } from './dtos/ban-user.dto';
-import { EditRolesDto } from './dtos/edit-roles-dto';
-import { RolesList } from '@common/types/roles.model';
+import { EditRolesDto } from './dtos/edit-roles.dto';
+import { RolesList } from '@common/types/roles.types';
 import { userDto } from './dtos/create-user.dto';
 import { Role } from '@db-models/role.model';
 import { Chat } from '@db-models/chat.model';
 import { Message } from '@db-models/message.model';
 import { UsersChats } from '@db-models/combined/users-chats.model';
+import { ChatPreview } from '@common/types/chat.types';
 
 @Injectable()
 export class UsersService {
@@ -64,6 +65,35 @@ export class UsersService {
     });
 
     return user.chats;
+  }
+
+  async getChatsPreviews(id: number): Promise<ChatPreview[]> {
+    const user = await this.userRepository.findByPk(id, {
+      include: {
+        model: Chat,
+        include: [{ model: Message, include: [User] }],
+        attributes: { exclude: ['UsersChats'] },
+      },
+    });
+
+    const chatsPreviews: ChatPreview[] = user.chats.map((chat) => {
+      const lastMessage = chat.messages[chat.messages.length - 1];
+      return {
+        id: chat.id,
+        name: chat.name,
+        lastMessage: lastMessage
+          ? {
+              body: lastMessage.body,
+              owner: {
+                id: lastMessage.owner.id,
+                nickname: lastMessage.owner.nickname,
+              },
+            }
+          : null,
+      };
+    });
+
+    return chatsPreviews;
   }
 
   async createUser(

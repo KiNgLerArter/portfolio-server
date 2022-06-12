@@ -1,5 +1,6 @@
 import { Chat } from '@db-models/chat.model';
 import { Message } from '@db-models/message.model';
+import { User } from '@db-models/user.model';
 import { UsersService } from '@features/users/users.service';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
@@ -27,8 +28,10 @@ export class MessagesService {
 
     await chat.$add('messages', message);
 
-    console.log('[😈😈MESSAGE😈😈]:', message);
-    return message;
+    const fullMessage = await this.messageRepository.findByPk(message.id, {
+      include: [User],
+    });
+    return fullMessage;
   }
 
   async deleteMessage(id: number): Promise<void> {

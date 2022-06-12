@@ -2,15 +2,11 @@ import {
   BelongsToMany,
   Column,
   DataType,
-  ForeignKey,
   HasMany,
-  Index,
   Model,
-  PrimaryKey,
   Table,
 } from 'sequelize-typescript';
 
-import { ChatTypes } from '@common/types/chat.model';
 import { UsersChats } from './combined/users-chats.model';
 import { Message } from './message.model';
 import { User } from './user.model';

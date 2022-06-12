@@ -1,4 +1,4 @@
-import { AuthTokens } from '@common/types/auth.model';
+import { AuthTokens } from '@common/types/auth.types';
 import { AuthUserDto } from '@features/auth/dtos/auth-user.dto';
 
 export namespace userDto {

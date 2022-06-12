@@ -1,4 +1,4 @@
-import { RolesList } from '@common/types/roles.model';
+import { RolesList } from '@common/types/roles.types';
 import {
   BelongsToMany,
   Column,

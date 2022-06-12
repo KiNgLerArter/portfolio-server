@@ -37,6 +37,7 @@ export class ChatsGateway
 
   @SubscribeMessage('join chats')
   async onJoinChats(client: Socket, chatIds: string[]) {
+    console.log('[😈😈chatIds😈😈]:', chatIds);
     client.join(chatIds);
   }
 
@@ -50,6 +51,11 @@ export class ChatsGateway
   @SubscribeMessage('send message')
   async onMessage(client: Socket, message: SaveMessageDto) {
     const savedMessage = await this.messagesService.saveMessage(message);
+    console.log(
+      '[😈😈message.chatId, savedMessage😈😈]:',
+      message.chatId,
+      savedMessage,
+    );
     this.server.to(message.chatId).emit('receive message', savedMessage);
   }
 }

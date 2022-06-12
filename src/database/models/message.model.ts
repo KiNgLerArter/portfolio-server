@@ -1,4 +1,4 @@
-import { RolesList } from '@common/types/roles.model';
+import { RolesList } from '@common/types/roles.types';
 import {
   AllowNull,
   BelongsTo,
@@ -46,6 +46,10 @@ export class Message extends Model<Message, MessageCreationAttrs> {
   })
   sentDate: string;
 
+  @BelongsTo(() => User, 'ownerId')
+  owner: User;
+
+  @ForeignKey(() => User)
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
