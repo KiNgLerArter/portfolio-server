@@ -85,9 +85,9 @@ export class User extends Model<User, UserCreationAttrs> {
   @BelongsToMany(() => Chat, () => UsersChats)
   chats: Chat[];
 
-  @HasMany(() => Message, 'ownerId')
+  @HasMany(() => Message, { foreignKey: 'ownerId', onDelete: 'CASCADE' })
   messages: Message[];
 
-  @HasOne(() => Token)
+  @HasOne(() => Token, { onDelete: 'CASCADE' })
   token: Token;
 }

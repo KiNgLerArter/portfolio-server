@@ -8,9 +8,8 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { ChatsService } from './chats.service';
-import { SaveMessageDto } from './messages/dtos/save-message.dto';
 import { MessagesService } from './messages/messages.service';
+import { messageDto } from './messages/types/message.type';
 
 @WebSocketGateway({ cors: true, namespace: 'chats' })
 export class ChatsGateway
@@ -49,7 +48,7 @@ export class ChatsGateway
   }
 
   @SubscribeMessage('send message')
-  async onMessage(client: Socket, message: SaveMessageDto) {
+  async onSendMessage(client: Socket, message: messageDto.Save) {
     const savedMessage = await this.messagesService.saveMessage(message);
     console.log(
       '[😈😈message.chatId, savedMessage😈😈]:',
@@ -57,5 +56,16 @@ export class ChatsGateway
       savedMessage,
     );
     this.server.to(message.chatId).emit('receive message', savedMessage);
+  }
+
+  @SubscribeMessage('delete message')
+  async onDeleteMessage(client: Socket, message: messageDto.Delete) {
+    await this.messagesService.deleteMessage(message.id);
+    console.log(
+      '[😈😈message.chatId, deletedMessage😈😈]:',
+      message.chatId,
+      message,
+    );
+    this.server.to(message.chatId).emit('delete message', message);
   }
 }

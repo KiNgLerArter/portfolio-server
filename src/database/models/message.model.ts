@@ -72,6 +72,6 @@ export class Message extends Model<Message, MessageCreationAttrs> {
   })
   repliedOnMessageId: number;
 
-  @HasMany(() => Message)
+  @HasMany(() => Message, { onDelete: 'CASCADE' })
   repliedMessages: Message[];
 }

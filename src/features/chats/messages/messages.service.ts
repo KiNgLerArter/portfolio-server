@@ -5,8 +5,7 @@ import { UsersService } from '@features/users/users.service';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { ChatsService } from '../chats.service';
-import { EditMessageDto } from './dtos/edit-message.dto';
-import { SaveMessageDto } from './dtos/save-message.dto';
+import { messageDto } from './types/message.type';
 
 @Injectable()
 export class MessagesService {
@@ -15,7 +14,7 @@ export class MessagesService {
     @InjectModel(Chat) private chatRepository: typeof Chat,
   ) {}
 
-  async saveMessage(dto: SaveMessageDto): Promise<Message> {
+  async saveMessage(dto: messageDto.Save): Promise<Message> {
     const { chatId, repliedOnMessageId } = dto;
     const message = await this.messageRepository.create(dto);
     if (repliedOnMessageId !== undefined && repliedOnMessageId !== null) {
@@ -39,7 +38,7 @@ export class MessagesService {
     message.destroy();
   }
 
-  async editMessage({ id, body }: EditMessageDto): Promise<Message> {
+  async editMessage({ id, body }: messageDto.Edit): Promise<Message> {
     const message = await this.messageRepository.findByPk(id);
     message.update({ body });
 

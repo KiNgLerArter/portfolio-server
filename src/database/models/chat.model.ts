@@ -33,6 +33,9 @@ export class Chat extends Model<Chat, ChatCreationAttrs> {
   @BelongsToMany(() => User, () => UsersChats)
   users: User[];
 
-  @HasMany(() => Message, 'chatId')
+  @HasMany(() => Message, {
+    foreignKey: 'chatId',
+    onDelete: 'CASCADE',
+  })
   messages: Message[];
 }
