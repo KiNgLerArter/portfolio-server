@@ -1,5 +1,6 @@
 import { Chat } from '@db-models/chat.model';
 import { Message } from '@db-models/message.model';
+import { User } from '@db-models/user.model';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Op } from 'sequelize';
@@ -22,7 +23,9 @@ export class ChatsService {
   }
 
   async getChatById(id: string): Promise<Chat> {
-    return await this.chatRepository.findByPk(id, { include: [Message] });
+    return await this.chatRepository.findByPk(id, {
+      include: [{ model: Message, include: [User] }],
+    });
   }
 
   async createChat({ name, usersIds }: CreateChatDto): Promise<Chat> {
