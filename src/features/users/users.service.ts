@@ -76,22 +76,9 @@ export class UsersService {
       },
     });
 
-    const chatsPreviews: ChatPreview[] = user.chats.map((chat) => {
-      const lastMessage = chat.messages[chat.messages.length - 1];
-      return {
-        id: chat.id,
-        name: chat.name,
-        lastMessage: lastMessage
-          ? {
-              body: lastMessage.body,
-              owner: {
-                id: lastMessage.owner.id,
-                nickname: lastMessage.owner.nickname,
-              },
-            }
-          : null,
-      };
-    });
+    const chatsPreviews: ChatPreview[] = user.chats.map(
+      (chat) => new ChatPreview(chat),
+    );
 
     return chatsPreviews;
   }

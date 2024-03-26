@@ -28,6 +28,10 @@ export class MockService {
     private chatsService: ChatsService,
   ) {}
 
+  // onApplicationBootstrap() {
+  //   this.fillDB();
+  // }
+
   async fillDB(): Promise<void> {
     await this.clearDB();
     await this.rolesService.createRoles(mockRoles);

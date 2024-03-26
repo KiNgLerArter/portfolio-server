@@ -48,24 +48,20 @@ export class ChatsGateway
   }
 
   @SubscribeMessage('send message')
-  async onSendMessage(client: Socket, message: messageDto.Save) {
+  async onSendMessage(_: Socket, message: messageDto.Save) {
     const savedMessage = await this.messagesService.saveMessage(message);
-    console.log(
-      '[😈😈message.chatId, savedMessage😈😈]:',
-      message.chatId,
-      savedMessage,
-    );
-    this.server.to(message.chatId).emit('receive message', savedMessage);
+    this.server.to(savedMessage.chatId).emit('receive message', savedMessage);
   }
 
   @SubscribeMessage('delete message')
-  async onDeleteMessage(client: Socket, message: messageDto.Delete) {
+  async onDeleteMessage(_: Socket, message: messageDto.Delete) {
     await this.messagesService.deleteMessage(message.id);
-    console.log(
-      '[😈😈message.chatId, deletedMessage😈😈]:',
-      message.chatId,
-      message,
-    );
     this.server.to(message.chatId).emit('delete message', message);
+  }
+
+  @SubscribeMessage('edit message')
+  async onEditMessage(_: Socket, message: messageDto.Edit) {
+    const editedMessage = await this.messagesService.editMessage(message);
+    this.server.to(editedMessage.chatId).emit('receive message', editedMessage);
   }
 }

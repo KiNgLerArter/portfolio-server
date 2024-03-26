@@ -8,10 +8,8 @@ import { User } from '@db-models/user.model';
 import { AuthModule } from '@features/auth/auth.module';
 import { ChatsModule } from '@features/chats/chats.module';
 import { RolesModule } from '@features/roles/roles.module';
-import { UsersModule } from '@features/users/users.module';
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { MockController } from './mock.controller';
 import { MockService } from './mock.service';
 
 @Module({
@@ -29,7 +27,6 @@ import { MockService } from './mock.service';
     RolesModule,
     ChatsModule,
   ],
-  controllers: [MockController],
   providers: [MockService],
 })
 export class MockModule {}

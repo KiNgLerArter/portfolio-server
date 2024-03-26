@@ -45,7 +45,7 @@ export class UsersController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('/:userId/chats-previews')
+  @Get('/:userId/chats/previews')
   getChatsPreviews(@Param('userId') userId: number) {
     return this.userService.getChatsPreviews(userId);
   }
